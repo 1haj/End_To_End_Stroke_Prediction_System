@@ -1,2 +1,0 @@
-notebook/data/origianl_data_listings.csv filter=lfs diff=lfs merge=lfs -text
-notebook/data/original_data_calendar.csv filter=lfs diff=lfs merge=lfs -text
