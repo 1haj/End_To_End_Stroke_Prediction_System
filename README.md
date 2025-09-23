@@ -7,6 +7,7 @@
 
 ## Docker Setup In EC2 commands to be Executed
 
+
 #optinal
 
 sudo apt-get update -y
