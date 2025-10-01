@@ -53,7 +53,7 @@ The project uses the **[Healthcare Stroke Prediction Dataset](https://www.kaggle
 
 ### 1. Clone the repository  
 ```bash
-git clone https://github.com/yourusername/stroke-prediction.git
+git clone 1haj/End_To_End_Stroke_Prediction_System
 cd stroke-prediction
 
 ### 2. Create a virtual environment & install dependencies
