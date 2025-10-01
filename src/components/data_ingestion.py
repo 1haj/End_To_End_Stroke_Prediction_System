@@ -12,6 +12,7 @@ from src.components.data_transformation import DataTransformationConfig
 
 from src.components.model_trainer import ModelTrainerConfig
 from src.components.model_trainer import ModelTrainer
+from imblearn.over_sampling import SMOTE
 @dataclass
 class DataIngestionConfig:
     train_data_path: str=os.path.join('artifacts',"train.csv")
@@ -26,7 +27,7 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
         try:
-            df=pd.read_csv('notebook\data\data_main.csv')
+            df=pd.read_csv('notebook\data\healthcare-dataset-stroke-data.csv')
          
             logging.info('Read the dataset as dataframe')
 
@@ -35,24 +36,16 @@ class DataIngestion:
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
         
             
-            numerical_columns = [
-                'bathrooms', 'bedrooms', 'beds', 'accommodates', 'guests_included',
-                'minimum_nights_avg_ntm', 'maximum_nights_avg_ntm',
-                'review_scores_rating', 'security_deposit', 'cleaning_fee', 'extra_people', 'host_response_rate','price_target'
-            ]
+            numerical_columns = ['age', 'bmi', 'avg_glucose_level']
             
-            categorical_columns = [
-                'room_type', 'property_type', 
-                'neighbourhood_cleansed',
-                'host_response_time', 'host_is_superhost', 'bed_type',
-                'instant_bookable', 'cancellation_policy'
-            ]
+            categorical_columns =['gender', 'hypertension', 'heart_disease', 'ever_married', 'work_type', 'Residence_type', 'smoking_status', 'stroke']
             
             df=df.loc[:,numerical_columns+categorical_columns]
             
 
             logging.info("Train test split initiated")
-            train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
+            
+            train_set,test_set=train_test_split(df,test_size=0.2,stratify=df['stroke'],random_state=42)
     
 
             train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
@@ -77,7 +70,7 @@ if __name__=="__main__":
 
     data_transformation=DataTransformation()
     train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
-    # print(train_arr.shape)
+    # print(train_arr)
     modeltrainer=ModelTrainer()
     print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
 

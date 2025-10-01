@@ -45,30 +45,6 @@ The project uses the **[Healthcare Stroke Prediction Dataset](https://www.kaggle
 - **Deployment:** Flask  
 - **Other:** Logging, Exception Handling  
 
----
-
-## 📂 Project Structure  
-
-├── app.py # Flask web app
-├── src/
-│ ├── components/
-│ │ ├── data_ingestion.py
-│ │ ├── data_transformation.py
-│ │ ├── model_trainer.py
-│ ├── pipeline/
-│ │ └── predict_pipeline.py
-│ ├── utils.py
-│ ├── exception.py
-│ ├── logger.py
-├── artifacts/ # Saved models and preprocessors
-│ ├── train.csv
-│ ├── test.csv
-│ ├── preprocessor.pkl
-│ └── model.pkl
-├── templates/
-│ └── home.html # Web interface
-├── notebook/ # Exploratory notebooks
-└── README.md
 
 
 ---
@@ -87,3 +63,4 @@ venv\Scripts\activate      # For Windows
 pip install -r requirements.txt
 ### 3. Run the Flask app
 python app.py
+The app will be available at: http://127.0.0.1:5000/🚀

@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 # import dill
 import pickle
-from sklearn.metrics import r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.base import BaseEstimator, TransformerMixin
 import re
@@ -37,8 +36,6 @@ class CurrencyPercentCleaner(BaseEstimator, TransformerMixin):
         X = X.copy()
         for col in self.columns:
             if col in X.columns:
-                # print("Cleaning:", col)
-                # print("Before cleaning:", X[col].unique()[:10])
                 X[col] = X[col].apply(
                     lambda x: float(re.sub(r"[^\d.]", "", str(x))) if pd.notnull(x) else x
                 )
@@ -52,17 +49,15 @@ class TargetGuidedEncoder(BaseEstimator, TransformerMixin):
 
     def fit(self, X, y):
         X = X.copy()
-        y = pd.Series(y, name="price_target")
-        # print(f"{X}is data")
-
-        # Combine X and y
+        y = pd.Series(y, name="stroke")
+        
         combined = pd.concat([X, y], axis=1)
-        # print(combined)
+        
 
         for col in self.columns:
         
             self.encoding_dict[col] = combined.groupby(col)[y.name].mean().to_dict()
-            # print(self.encoding_dict)
+            
         
         return self
 
@@ -75,40 +70,48 @@ class TargetGuidedEncoder(BaseEstimator, TransformerMixin):
 
 
     
-def evaluate_models(X_train, y_train,X_test,y_test,models,param):
+from sklearn.metrics import confusion_matrix, classification_report
+
+def evaluate_models(X_train, y_train, X_test, y_test, models, param):
     try:
         report = {}
 
         for i in range(len(list(models))):
             model = list(models.values())[i]
-            para=param[list(models.keys())[i]]
-            
+            para = param[list(models.keys())[i]]
 
-            gs = GridSearchCV(model,para,cv=3)
-            gs.fit(X_train,y_train)
+            gs = GridSearchCV(model, para, cv=3, scoring='accuracy', error_score='raise')
+            gs.fit(X_train, y_train)
 
             model.set_params(**gs.best_params_)
-            model.fit(X_train,y_train)
-
-            
+            model.fit(X_train, y_train)
 
             y_train_pred = model.predict(X_train)
-
             y_test_pred = model.predict(X_test)
 
-            train_model_score = r2_score(y_train, y_train_pred)
+            model_score = round(model.score(X_test, y_test), 3)
 
-            test_model_score = r2_score(y_test, y_test_pred)
+            print(f"model: {model}, length: {len(y_test_pred)}, length of predicted 1s: {len(y_test_pred[y_test_pred==1])}, score: {model_score}")
 
-            report[list(models.keys())[i]] = test_model_score
+            # Confusion Matrix
+            cm = confusion_matrix(y_test, y_test_pred)
+            print(f"Confusion Matrix for {list(models.keys())[i]}:\n{cm}\n")
+
+            # Optional: classification report
+            cr = classification_report(y_test, y_test_pred)
+            print(f"Classification Report for {list(models.keys())[i]}:\n{cr}\n")
+
+            report[list(models.keys())[i]] = model_score
             logging.info(f"my report:{report}")
 
         return report
+    except Exception as e:
+        raise CustomException(e, sys)
+
 
     except Exception as e:
         raise CustomException(e, sys)
-        
-    
+
 def load_object(file_path):
     try:
         with open(file_path, "rb") as file_obj:

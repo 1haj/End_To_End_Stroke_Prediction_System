@@ -13,41 +13,31 @@ app=application
 
 @app.route('/')
 def index():
-    df=pd.read_csv('notebook\data\data_main.csv')
-    neighbourhoods = list(df['neighbourhood_cleansed'].unique())
-    return render_template('home.html', neighbourhoods=neighbourhoods)
+    # df=pd.read_csv('notebook\data\healthcare-dataset-stroke-data.csv')
+    
+    return render_template('home.html')
 
 
 @app.route('/predictdata',methods=['GET','POST'])
 def predict_datapoint():
-    df=pd.read_csv('notebook\data\data_main.csv')
-    neighbourhoods = list(df['neighbourhood_cleansed'].unique())
+    
+    
+
 
     if request.method=='GET':
-        return render_template('home.html', neighbourhoods=neighbourhoods)
+        return render_template('home.html')
     else:
         data = CustomData(
     # Numeric features
-        bathrooms=float(request.form.get('bathrooms')),
-        bedrooms=float(request.form.get('bedrooms')),
-        beds=float(request.form.get('beds')),
-        accommodates=float(request.form.get('accommodates')),
-        guests_included=float(request.form.get('guests_included')),
-        minimum_nights_avg_ntm=float(request.form.get('minimum_nights_avg_ntm')),
-        maximum_nights_avg_ntm=float(request.form.get('maximum_nights_avg_ntm')),
-        cleaning_fee=float(request.form.get('cleaning_fee')),
-        extra_people=float(request.form.get('extra_people')),
-        security_deposit=float(request.form.get('security_deposit')),
-        host_response_rate=float(request.form.get('host_response_rate')),
+        age=float(request.form.get('age')),
+        bmi=float(request.form.get('bmi')),
+        avg_glucose_level=float(request.form.get('avg_glucose_level')),
+        gender=request.form.get('gender'),
+        ever_married=request.form.get('ever_married'),
+        Residence_type=request.form.get('Residence_type'),
+        work_type=request.form.get('work_type'),
+        smoking_status=request.form.get('smoking_status')
         
-
-        # Categorical features (keep them as strings)
-        room_type=request.form.get('room_type'),
-        property_type=request.form.get('property_type'),
-        neighbourhood_cleansed=request.form.get('neighbourhood_cleansed'),
-        host_is_superhost=request.form.get('host_is_superhost'),
-        bed_type=request.form.get('bed_type'),
-        cancellation_policy=request.form.get('cancellation_policy')
     )
 
         pred_df=data.get_data_as_data_frame()
@@ -63,7 +53,7 @@ def predict_datapoint():
 
 if __name__=="__main__":
     port = 5000 
-    print(f"Running on http://127.0.0.1:{port}")
+    # print(f"Running on http://127.0.0.1:{port}")
     app.run(host="0.0.0.0",debug=True)      
     
 

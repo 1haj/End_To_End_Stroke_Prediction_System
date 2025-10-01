@@ -27,79 +27,37 @@ class PredictPipeline:
 
 class CustomData:
     def __init__(self,
-        bathrooms,
-        bedrooms,
-        beds,
-        accommodates,
-        guests_included,
-        minimum_nights_avg_ntm,
-        maximum_nights_avg_ntm,
-        cleaning_fee,
-        extra_people,
-        security_deposit,
-        host_response_rate,
-        room_type,
-        property_type,
-        neighbourhood_cleansed,
-        host_is_superhost,
-        bed_type,
-        cancellation_policy
+        age, bmi, avg_glucose_level,gender, ever_married, Residence_type,work_type, smoking_status
         ):
 
-        self.bathrooms = bathrooms
+        self.age = age
 
-        self.bedrooms = bedrooms
+        self.bmi = bmi
 
-        self.beds = beds
+        self.avg_glucose_level = avg_glucose_level
 
-        self.accommodates = accommodates
+        self.gender = gender
 
-        self.guests_included = guests_included
+        self.ever_married = ever_married
 
-        self.minimum_nights_avg_ntm = minimum_nights_avg_ntm
+        self.Residence_type = Residence_type
 
-        self.maximum_nights_avg_ntm = maximum_nights_avg_ntm
+        self.work_type = work_type
 
-        self.cleaning_fee = cleaning_fee
+        self.smoking_status = smoking_status
 
-        self.extra_people = extra_people
-
-        self.security_deposit = security_deposit
-        
-        self.host_response_rate = host_response_rate
-        
-        self.room_type=room_type
-        self.property_type=property_type
-
-        self.neighbourhood_cleansed = neighbourhood_cleansed
-
-
-        self.host_is_superhost =host_is_superhost
-        
-        self.bed_type = bed_type
-        
-        self.cancellation_policy=cancellation_policy
 
     def get_data_as_data_frame(self):
         try:
             custom_data_input_dict = {
-                "bathrooms": [self.bathrooms],
-                "bedrooms": [self.bedrooms],
-                "beds": [self.beds],
-                "accommodates": [self.accommodates],
-                "guests_included": [self.guests_included],
-                "minimum_nights_avg_ntm": [self.minimum_nights_avg_ntm],
-                "maximum_nights_avg_ntm": [self.maximum_nights_avg_ntm],
-                "cleaning_fee": [self.cleaning_fee],
-                "extra_people": [self.extra_people],
-                "security_deposit": [self.security_deposit],
-                "host_response_rate": [self.host_response_rate],
-                "room_type": [self.room_type],
-                "property_type": [self.property_type],
-                "neighbourhood_cleansed": [self.neighbourhood_cleansed],
-                "host_is_superhost": [self.host_is_superhost],
-                "bed_type": [self.bed_type],
-                "cancellation_policy": [self.cancellation_policy]
+                "age": [self.age],
+                "bmi": [self.bmi],
+                "avg_glucose_level": [self.avg_glucose_level],
+                "gender": [self.gender],
+                "ever_married": [self.ever_married],
+                "Residence_type": [self.Residence_type],
+                "work_type": [self.work_type],
+                "smoking_status": [self.smoking_status]
             }
 
             return pd.DataFrame(custom_data_input_dict)
